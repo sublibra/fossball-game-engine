@@ -1,6 +1,4 @@
 
-happybox@habbydb.cfipe0gtw5ei.eu-west-1.rds.amazonaws.com
-
 
 CREATE TABLE players (
 	playerid VARCHAR(20) NOT NULL, 

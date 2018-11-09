@@ -55,7 +55,15 @@ const setupGame = () => {
   assignPlayer(BUTTON_BLUE,"ID4");
 
   // Get/Set gameID
-  gameID = 256;
+  gameID = null;
+  let date = new Date().toISOString().slice(0, 19).replace('T', ' ');
+  let sql = `INSERT INTO games VALUES (null, '${players[0]}', '${players[1]}', '${players[2]}', '${players[3]}', '${date}')`;
+  mysqlConnection.query(sql, (err, result) => {
+    if (err) throw err;
+    console.log(`New game inserted: `,result.insertId);
+    gameID = result.insertId;
+  });
+  
 
 }
 
@@ -86,11 +94,9 @@ const shouldPlayersSwitchSide = ([team1,team2]) => {
   if (team2 === 5){
     const yellow = players[BUTTON_YELLOW];
     players[BUTTON_YELLOW] = players[BUTTON_BLUE];
-    players[BUTTON_BLUE] = red;
+    players[BUTTON_BLUE] = yellow;
     return;
-
   }
-  //red->green .... [team 1, team 2]
 }
 
 const startGame = () => {
@@ -100,7 +106,6 @@ const startGame = () => {
   let button;
 
   // Wait for button scores or the cancel button for quitting the game
-  // The players are not allowed to move during the game (fix later)
   while (score[0] < 10 && score[1] < 10 && button != BUTTON_CANCEL){
     shouldPlayersSwitchSide(score);
     button = waitForButtonInput();
@@ -143,8 +148,8 @@ const endGame = () => {
 connectToDatabase();
 
 setupGame();
-startGame();
-endGame();
+//startGame();
+//endGame();
 
 
 

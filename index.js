@@ -1,9 +1,12 @@
 const configuration = require('./config.js');
 const mysql = require('mysql');
 
+// Current game mode
+let mode = 0;
 const GAME_INIT=0;
 const GAME_STARTED=1;
 const GAME_END=2;
+
 const BUTTON_CANCEL=4;
 
 // Team 1
@@ -14,10 +17,11 @@ const BUTTON_GREEN=1;
 const BUTTON_YELLOW=2;
 const BUTTON_BLUE=3;
 
+// [player1, player2, player3, player4] ids (nfc tag)
 let players = [];
-let mode = 0;
-let gameID;
 
+// Unique game identifier as fetched from the database
+let gameID;
 let mysqlConnection;
 
 const connectToDatabase = () => {
@@ -49,12 +53,12 @@ const setupGame = () => {
   console.log("= Setup new game =");
 
   // Assign player 1
-  assignPlayer(BUTTON_RED,"ID1"); 
+  assignPlayer(BUTTON_RED,"NFCID 1"); 
   assignPlayer(BUTTON_GREEN,"ID2");
   assignPlayer(BUTTON_YELLOW,"ID3");
   assignPlayer(BUTTON_BLUE,"ID4");
 
-  // Get/Set gameID
+  // Get gameID
   gameID = null;
   let date = new Date().toISOString().slice(0, 19).replace('T', ' ');
   let sql = `INSERT INTO games VALUES (null, '${players[0]}', '${players[1]}', '${players[2]}', '${players[3]}', '${date}')`;
@@ -63,8 +67,6 @@ const setupGame = () => {
     console.log(`New game inserted: `,result.insertId);
     gameID = result.insertId;
   });
-  
-
 }
 
 const waitForButtonInput = () => {
@@ -83,6 +85,8 @@ const reportScore = (gameID, playerID) => {
   });
 }
 
+// After a team has reached a score of five the team members switch sides
+// back to forward etc.
 const shouldPlayersSwitchSide = ([team1,team2]) => {
   // Reassign player ids
   if (team1 === 5){
@@ -100,8 +104,9 @@ const shouldPlayersSwitchSide = ([team1,team2]) => {
 }
 
 const startGame = () => {
-  mode = GAME_END;
+  mode = GAME_STARTED;
   console.log("= Start new game =");
+  // [team1 score, team2 score]  (team1 = red and green)
   let score = [0,0];
   let button;
 
@@ -143,13 +148,13 @@ const endGame = () => {
   mode = GAME_END;
   console.log("= End game =");
 
+  // Notify UI that the game ended
 }
 
+// Application init
 connectToDatabase();
-
-setupGame();
-//startGame();
-//endGame();
-
-
-
+while (true){
+  setupGame();
+  startGame();
+  endGame();
+}

@@ -6,7 +6,7 @@ services:
     image: qlikcore/engine:12.268.0
     restart: always
     command: |
-      - -S AcceptEULA=${ACCEPT_EULA}
+      - -S AcceptEULA=${ACCEPT_EULA}  -S GrpcConnectorPlugins="jdbc,jdbc-connector:50051"
     ports:
       - "9076:9076"
 
@@ -20,13 +20,14 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: example
       MYSQL_DATABASE: fossball
+    ports:
+      - 3306:3306
 
   adminer:
     image: adminer
     restart: always
     ports:
       - 8080:8080
-
 
   jdbc-connector:
     image: sublibra/core-happy_jdbc-connector

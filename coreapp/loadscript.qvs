@@ -1,0 +1,7 @@
+lib connect to 'jdbc';
+players:
+LOAD
+  *
+  sql SELECT * FROM playerid;
+  `;
+

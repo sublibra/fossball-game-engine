@@ -1,0 +1,37 @@
+
+version: "3.3"
+
+services:
+  qix-engine:
+    image: qlikcore/engine:12.268.0
+    restart: always
+    command: |
+      - -S AcceptEULA=${ACCEPT_EULA}
+    ports:
+      - "9076:9076"
+
+  # Use root/example as user/password credential
+  db:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    volumes:
+      - ./db_setup.sql:/docker-entrypoint-initdb.d/dump.sql
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+      MYSQL_DATABASE: fossball
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
+
+  jdbc-connector:
+    image: sublibra/core-happy_jdbc-connector
+    ports:
+      - 50051:50051
+    environment:
+      DATABASE_FETCH_SIZE: 100000
+      MAX_DATA_CHUNK_SIZE: 300

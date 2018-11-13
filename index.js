@@ -153,8 +153,8 @@ const endGame = () => {
 
 // Application init
 connectToDatabase();
-while (true){
+
   setupGame();
   startGame();
   endGame();
-}
+

@@ -33,6 +33,10 @@ Apart form getting a new Raspbian image you need to install the following:
 
 * Rename config-example.js to config.js and add your data
 
+* Start Qlik associate engine, local mysql database (dev purpose) and jdbc connector
+
+`ACCEPT_EULA=yes docker-compose up -d`
+
 * Start the service with: 
 
 `npm run start`

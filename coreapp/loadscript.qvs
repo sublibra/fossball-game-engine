@@ -1,0 +1,15 @@
+lib connect to 'jdbc';
+players:
+LOAD
+  *;
+  sql SELECT * FROM playerid;
+
+scores:
+LOAD
+  *;
+  sql SELECT * FROM scores;
+
+games:
+LOAD
+  *;
+  sql SELECT * FROM games;

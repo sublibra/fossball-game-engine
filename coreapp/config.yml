@@ -9,6 +9,6 @@ connections:
     password: example
     settings:
       driver: mysql
-      host: localhost
+      host: host.docker.internal
       port: 3306
       database: fossball

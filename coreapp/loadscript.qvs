@@ -2,14 +2,14 @@ lib connect to 'jdbc';
 players:
 LOAD
   *;
-  sql SELECT * FROM playerid;
+  sql SELECT * FROM fossball.players;
 
 scores:
 LOAD
   *;
-  sql SELECT * FROM scores;
+  sql SELECT * FROM fossball.scores;
 
 games:
 LOAD
   *;
-  sql SELECT * FROM games;
+  sql SELECT * FROM fossball.games;
